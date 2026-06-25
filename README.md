@@ -1,14 +1,18 @@
 # Reptilia Antiqua
 
+[![Open the live guide](https://img.shields.io/badge/%F0%9F%A6%95%20Open%20the%20live%20guide-Reptilia%20Antiqua-2c5346?style=for-the-badge)](https://yingzhiva.github.io/Reptilia-Antiqua/)
+
+> **Live site → https://yingzhiva.github.io/Reptilia-Antiqua/**
+
 **An illustrated guide to dinosaurs & their prehistoric cousins** — a friendly cheat-sheet for grown-ups.
 
-Tap any creature on the timeline to learn fun facts, see how big it was, and hear how to say its name in **English, Deutsch, Español, and 中文** (with audio). Next time your toddler shouts "Spinosaurus!", you'll be ready.
+Tap any creature on the timeline to learn fun facts, see how big it was, and hear how to say its name. The interface is fully localised in **English, Deutsch, and Français**, with **Italiano, Español, and 中文 (繁體)** adding each creature's name and pronunciation. Next time your toddler shouts "Spinosaurus!", you'll be ready.
 
 It's a single self-contained `index.html` styled like a vintage natural-history monograph, with original AI-generated watercolor plates for every creature.
 
 ## View it
 
-- **Online:** enable GitHub Pages for this repo (Settings → Pages → deploy from `main`), then open the published link.
+- **Online:** **https://yingzhiva.github.io/Reptilia-Antiqua/** (hosted on GitHub Pages).
 - **Locally:** just open `index.html` in any modern browser — no build step, no dependencies.
 
 > Pronunciation audio uses Google Translate voices and needs an internet connection; offline it falls back to your device's built-in voice automatically.
