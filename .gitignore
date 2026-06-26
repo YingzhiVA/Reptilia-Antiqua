@@ -1,1 +1,7 @@
 *:Zone.Identifier
+
+# local Python venv for the image pipeline (tools/embed_image.py)
+tools/venv/
+
+# raw artwork drops awaiting embedding (the embedded + art/ copies are what we keep)
+Gemini_Generated_*.png
