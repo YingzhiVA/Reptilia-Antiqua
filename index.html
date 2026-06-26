@@ -174,14 +174,15 @@
   /* size-to-human scale */
   .scale{margin:8px 0 18px;padding:14px 16px;background:#fbf2da;border:1px solid var(--hair);border-radius:4px}
   .scaletitle{font-family:'Cormorant',serif;font-weight:700;font-size:15px;color:var(--green-d);margin-bottom:10px}
-  .scalerow{display:flex;align-items:center;gap:10px;margin:7px 0}
-  .scalerow .slabel{flex:0 0 116px;display:flex;align-items:center;gap:5px;font-size:13px;color:var(--ink);
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .scalerow .strack{flex:1;height:13px;background:rgba(70,55,25,.09);border-radius:7px;overflow:hidden}
+  .scalerow{margin:9px 0}
+  .scalehead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px}
+  .scalerow .slabel{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--ink);
+    min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .scalerow .snum{flex:0 0 auto;font-size:13px;color:var(--ink2);font-style:normal;white-space:nowrap}
+  .scalerow .strack{display:block;width:100%;height:13px;background:rgba(70,55,25,.09);border-radius:7px;overflow:hidden}
   .scalerow .sfill{display:block;height:100%;border-radius:7px}
   .scalerow .sfill.human{background:#9aa79f}
   .scalerow .sfill.dino{background:linear-gradient(90deg,#c7a55c,#a8842f)}
-  .scalerow .snum{flex:0 0 auto;font-size:13px;color:var(--ink2);font-style:normal}
   .facts h3,.say h3{font-family:'Cormorant',serif;font-weight:700;margin:0 0 12px;font-size:24px;color:var(--green-d);
     border-bottom:2px solid var(--brass);display:inline-block;padding-bottom:3px}
   .facts ul{margin:0;padding-left:0;list-style:none}
@@ -505,8 +506,8 @@ function openCard(d){
     const max=Math.max(d.m,1.7), hw=Math.max(1.7/max*100,4), dw=Math.max(d.m/max*100,4);
     const tw=d.mt==="wing"?t("unitWing"):t("unitLong");
     return `<div class="scale"><div class="scaletitle">${t("howBig")}</div>
-      <div class="scalerow"><span class="slabel">${ICON.person} ${t("youLabel")}</span><span class="strack"><i class="sfill human" style="width:${hw}%"></i></span><span class="snum">1.7 m</span></div>
-      <div class="scalerow"><span class="slabel">${d.short||nameFor(d)}</span><span class="strack"><i class="sfill dino" style="width:${dw}%"></i></span><span class="snum">${d.m} m ${tw}</span></div></div>`;
+      <div class="scalerow"><div class="scalehead"><span class="slabel">${ICON.person} ${t("youLabel")}</span><span class="snum">1.7 m</span></div><span class="strack"><i class="sfill human" style="width:${hw}%"></i></span></div>
+      <div class="scalerow"><div class="scalehead"><span class="slabel">${d.short||nameFor(d)}</span><span class="snum">${d.m} m ${tw}</span></div><span class="strack"><i class="sfill dino" style="width:${dw}%"></i></span></div></div>`;
   })();
   cardContent.innerHTML=`
     <div class="cardhead">
