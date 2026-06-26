@@ -452,9 +452,9 @@ function openCard(d){
   const rows=[];
   if(LANG!=="en"){
     const nm=nameFor(d), m=TTS[LANG];
-    rows.push({flag:LANGLABEL[LANG],sub:LANGFULL[LANG]+(LANG==="zh"?" · pīnyīn: "+d.pinyin:""),name:nm,g:m.g,w:m.w,speak:nm});
+    rows.push({flag:LANGLABEL[LANG],sub:LANGFULL[LANG]+(LANG==="zh"?" · pīnyīn: "+d.pinyin:""),name:nm,lang:LANG,w:m.w,speak:nm});
   }
-  rows.push({flag:"EN",sub:LANGFULL.en+(d.say&&d.say.en?" · say: "+d.say.en:""),name:d.en,g:"en",w:"en-GB",speak:d.en});
+  rows.push({flag:"EN",sub:LANGFULL.en+(d.say&&d.say.en?" · say: "+d.say.en:""),name:d.en,lang:"en",w:"en-GB",speak:d.en});
   const scaleHTML=(()=>{
     if(!d.m) return "";
     const max=Math.max(d.m,1.7), hw=Math.max(1.7/max*100,4), dw=Math.max(d.m/max*100,4);
@@ -478,7 +478,7 @@ function openCard(d){
       </div>
       <div class="facts"><h3>${t("funFacts")}</h3>${scaleHTML}<ul>${factsFor(d).map(f=>`<li>${f}</li>`).join("")}</ul></div>
     </div>`;
-  cardContent.querySelectorAll(".speak").forEach(b=>{b.addEventListener("click",()=>{const R=rows[+b.dataset.i];speak(R.speak,R.g,R.w,b);});});
+  cardContent.querySelectorAll(".speak").forEach(b=>{b.addEventListener("click",()=>{const R=rows[+b.dataset.i];speak("audio/"+d.id+"_"+R.lang+".mp3",R.speak,R.w,b);});});
   const _nav=navOrder(), _i=_nav.indexOf(d);
   prevBtn.disabled=_i<=0; nextBtn.disabled=_i>=_nav.length-1;
   card.scrollTop=0;
@@ -500,14 +500,13 @@ document.addEventListener("keydown",e=>{if(!overlay.classList.contains("open"))r
 let currentAudio=null,activeBtn=null;
 function clearBtn(b){if(b)b.classList.remove("loading","playing");}
 function stopAudio(){if(currentAudio){currentAudio.pause();currentAudio=null;}if(window.speechSynthesis)window.speechSynthesis.cancel();clearBtn(activeBtn);activeBtn=null;}
-function speak(text,glang,wlang,btn){
+function speak(src,text,wlang,btn){
   stopAudio(); activeBtn=btn||null; if(btn)btn.classList.add("loading");
-  const url="https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl="+encodeURIComponent(glang)+"&q="+encodeURIComponent(text);
   const a=new Audio(); currentAudio=a; let done=false;
   a.addEventListener("playing",()=>{done=true;if(btn){btn.classList.remove("loading");btn.classList.add("playing");}});
   a.addEventListener("ended",()=>clearBtn(btn));
   a.addEventListener("error",()=>{if(!done){clearBtn(btn);webSpeak(text,wlang,btn);}});
-  a.src=url; a.play().then(()=>{}).catch(()=>{if(!done){clearBtn(btn);webSpeak(text,wlang,btn);}});
+  a.src=src; a.play().then(()=>{}).catch(()=>{if(!done){clearBtn(btn);webSpeak(text,wlang,btn);}});
 }
 let VOICES=[];
 function loadVoices(){VOICES=window.speechSynthesis?window.speechSynthesis.getVoices():[];}
