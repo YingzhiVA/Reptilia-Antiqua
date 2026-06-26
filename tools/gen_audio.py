@@ -31,6 +31,13 @@ VOICES = {
 }
 SPEAKING_RATE = 0.95
 
+# Per-clip VOICE overrides for when the default voice mis-says a name.
+# Key (id, lang) -> (languageCode, voiceName) used just for that clip.
+VOICE_OVERRIDES = {
+    # en-GB reads "Coelophysis" with a hard C; the US voice gets the soft-c right.
+    ("coelophysis", "en"): ("en-US", "en-US-Neural2-C"),
+}
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HTML = os.path.join(ROOT, "index.html")
 OUT = os.path.join(ROOT, "audio")
@@ -50,8 +57,7 @@ def parse_creatures(html):
     return out
 
 
-def synth(text, lang, key):
-    lc, voice = VOICES[lang]
+def synth(text, lc, voice, key):
     body = json.dumps({
         "input": {"text": text},
         "voice": {"languageCode": lc, "name": voice},
@@ -83,8 +89,9 @@ def main():
             skipped += 1
             continue
         try:
+            lc, voice = VOICE_OVERRIDES.get((cid, lang), VOICES[lang])
             with open(path, "wb") as f:
-                f.write(synth(txt, lang, key))
+                f.write(synth(txt, lc, voice, key))
             made += 1
             print(f"  ✓ {cid}_{lang}.mp3  {txt}")
         except Exception as e:
