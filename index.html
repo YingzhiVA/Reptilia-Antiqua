@@ -531,9 +531,9 @@ function openCard(d){
     sc.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openLightbox(d);}});}
   const _nav=navOrder(), _i=_nav.indexOf(d);
   prevBtn.disabled=_i<=0; nextBtn.disabled=_i>=_nav.length-1;
-  cardContent.scrollTop=0;
   overlay.classList.add("open");
   document.body.classList.add("modal-open");
+  cardContent.scrollTop=0;
 }
 function closeCard(){overlay.classList.remove("open");document.body.classList.remove("modal-open");stopAudio();}
 document.getElementById("closeBtn").addEventListener("click",closeCard);
