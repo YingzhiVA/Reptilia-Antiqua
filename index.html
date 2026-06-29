@@ -517,7 +517,7 @@ function openCard(d){
       <div class="titleRow"><h2>${nameFor(d)}</h2><span class="order"${d.notDino?` title="${t("notDinoTip")}"`:``}>${orderFor(d.order||"Dinosaur")}</span></div>
       <div class="subtitle">${ICON.clock} ${periodFor(d.period)} · ${ageFor(d.age)}</div>
     </div>
-    <div class="scene ${d.hab}${IMG(d.id)?" zoomable":""}"${IMG(d.id)?` role="button" tabindex="0" aria-label="${t("enlargeHint")}"`:""}><img class="main" src="${IMG(d.id)}" alt="${nameFor(d)}">${IMG(d.id)?`<span class="zoomhint">${ICON.zoom}</span>`:""}</div>
+    <div class="scene ${d.hab}${IMG(d.id)?" zoomable":""}"${IMG(d.id)?` role="button" tabindex="0" aria-label="${t("enlargeHint")}"`:""}><img class="main" src="${IMG(d.id)}" alt="${nameFor(d)}"${THUMB(d.id)?` style="background:url(${THUMB(d.id)}) center/cover no-repeat"`:""}>${IMG(d.id)?`<span class="zoomhint">${ICON.zoom}</span>`:""}</div>
     <div class="body">
       <div class="say"><h3>${t("sayIt")}</h3>
         <div class="langs">${rows.map((R,i)=>`
