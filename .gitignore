@@ -1,7 +1,8 @@
 *:Zone.Identifier
 
-# local Python venv for the image pipeline (tools/embed_image.py)
+# local Python venv + bytecode cache for the image pipeline (tools/embed_image.py)
 tools/venv/
+__pycache__/
 
 # raw artwork drops awaiting embedding (the embedded + art/ copies are what we keep)
 Gemini_Generated_*.png

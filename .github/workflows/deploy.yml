@@ -36,11 +36,12 @@ jobs:
           sed -i "s|const BUILD=\"dev\";|const BUILD=\"${VER} \xc2\xb7 ${SHA}\";|" index.html
           grep -o 'const BUILD="[^"]*"' index.html
 
-      - name: Stage site (index + audio + social image; art/ stays in repo only)
+      - name: Stage site (index + img + audio + social image; art/ stays in repo only)
         run: |
           mkdir -p _site
           cp index.html _site/
           cp preview.jpg _site/
+          cp -r img _site/img
           cp -r audio _site/audio
 
       - name: Upload Pages artifact

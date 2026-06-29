@@ -2,11 +2,11 @@
 """
 Embed creature artwork into index.html for Reptilia Antiqua.
 
-The app is a single self-contained index.html: each illustration lives as a
-base64 JPEG inside the CREDITS object (a `file` ~1000px and a `thumb` ~200px),
-so there are no separate image requests. This script does the repetitive part of
-that pipeline — resize, compress, base64, and splice into CREDITS — and saves the
-full-size source under art/.
+Each illustration is served as two JPEG files under img/ — a `file` ~1000px
+(card image) and a `thumb` ~200px (timeline) — referenced by path from the
+CREDITS object. This script does the repetitive part of that pipeline — resize,
+compress, write img/<id>.jpg + img/<id>_thumb.jpg, and point CREDITS at them —
+and also saves the full-size source under art/.
 
 Setup (once): a local venv with Pillow lives in tools/venv (git-ignored).
     python3 -m venv tools/venv && tools/venv/bin/pip install Pillow
@@ -25,15 +25,16 @@ Each file's creature id is inferred from its name (ALIAS map + fuzzy match again
 the ids already in index.html). The creature must already exist in CREDITS — this
 script REPLACES that entry's `file`/`thumb` (the common "regenerated the art" case)
 and refuses to invent a new entry, so a typo can't silently create a stray creature.
-After embedding it copies the source to art/<slug>.png and (by default) deletes the
+After processing it copies the source to art/<slug>.png and (by default) deletes the
 root Gemini_Generated_*.png. Always eyeball the result in the app afterwards.
 """
-import os, re, io, sys, glob, base64, shutil
+import os, re, io, sys, glob, shutil
 from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HTML = os.path.join(ROOT, "index.html")
 ART = os.path.join(ROOT, "art")
+IMG = os.path.join(ROOT, "img")
 
 FILE_W, FILE_Q = 1000, 82          # card image
 THUMB_W, THUMB_Q = 200, 78         # timeline thumbnail
@@ -69,14 +70,18 @@ def infer_id(stem, ids):
     raise ValueError(f"could not map '{stem}' to a creature id (add it to ALIAS)")
 
 
-def jpeg_datauri(img, width, q):
+def encode_jpeg(img, width, q, outpath=None):
+    """Resize+compress to JPEG; write to outpath if given. Returns byte size."""
     im = img.convert("RGB")
     w, h = im.size
     im = im.resize((width, round(h * width / w)), Image.LANCZOS)
     buf = io.BytesIO()
     im.save(buf, "JPEG", quality=q, progressive=True, optimize=True)
     data = buf.getvalue()
-    return "data:image/jpeg;base64," + base64.b64encode(data).decode(), len(data)
+    if outpath:
+        with open(outpath, "wb") as f:
+            f.write(data)
+    return len(data)
 
 
 def credit_span(html, cid):
@@ -114,18 +119,21 @@ def process(path, html, ids, dry):
     if span is None:
         raise ValueError(f"no CREDITS entry for id '{cid}' — add one first, then re-run")
     img = Image.open(path)
-    file_uri, fsz = jpeg_datauri(img, FILE_W, FILE_Q)
-    thumb_uri, tsz = jpeg_datauri(img, THUMB_W, THUMB_Q)
+    file_rel, thumb_rel = f"img/{cid}.jpg", f"img/{cid}_thumb.jpg"
+    if not dry:
+        os.makedirs(IMG, exist_ok=True)
+    fsz = encode_jpeg(img, FILE_W, FILE_Q, None if dry else os.path.join(ROOT, file_rel))
+    tsz = encode_jpeg(img, THUMB_W, THUMB_Q, None if dry else os.path.join(ROOT, thumb_rel))
     print(f"  {os.path.basename(path)} -> {cid}: {img.size[0]}x{img.size[1]} "
           f"=> file ~{fsz // 1024} KB, thumb ~{tsz // 1024} KB")
     if dry:
         return html
     i, j = span
-    obj = set_field(set_field(html[i:j], "file", file_uri), "thumb", thumb_uri)
+    obj = set_field(set_field(html[i:j], "file", file_rel), "thumb", thumb_rel)
     html = html[:i] + obj + html[j:]
     slug = SLUG_OVERRIDES.get(cid, cid)
     shutil.copyfile(path, os.path.join(ART, slug + ".png"))
-    print(f"    embedded + saved art/{slug}.png")
+    print(f"    wrote {file_rel} + {thumb_rel} and art/{slug}.png")
     return html
 
 
