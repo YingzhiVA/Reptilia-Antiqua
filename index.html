@@ -192,7 +192,8 @@
   .credit{font-size:12.5px;color:#9a8a66;margin-top:14px;font-style:normal}
   .credit a{color:var(--brass)}
   footer{max-width:640px;margin:0 auto;font-size:14px;color:var(--ink2);padding:8px 16px 46px}
-  .version{text-align:center;font-family:'EB Garamond',serif;font-size:11.5px;letter-spacing:.06em;color:var(--ink2);opacity:.55;margin-top:14px}
+  .footcred{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:3px 7px}
+  .version{font-family:'EB Garamond',serif;font-size:11.5px;letter-spacing:.04em;color:var(--ink2);opacity:.55}
   footer a{color:var(--brass)}
   footer details{background:#fbf2da;border:1px solid var(--hair);border-radius:5px;padding:10px 16px;margin-top:14px}
   footer summary{cursor:pointer;font-family:'Cormorant',serif;font-weight:700;font-size:18px;color:var(--green-d)}
@@ -256,7 +257,10 @@
 </div>
 
 <footer>
-  <div class="center" data-i18n-html="madeBy">Made with curiosity by <a href="https://github.com/YingzhiVA" target="_blank" rel="noopener">YingzhiVA</a></div>
+  <div class="footcred">
+    <span class="center" data-i18n-html="madeBy">Made with curiosity by <a href="https://github.com/YingzhiVA" target="_blank" rel="noopener">YingzhiVA</a></span>
+    <span class="version" aria-label="version">· <span id="version">dev</span></span>
+  </div>
   <details class="info">
     <summary data-i18n="aboutSummary">About this guide &amp; credits</summary>
     <div class="infobody">
@@ -273,7 +277,6 @@
       <p data-i18n-html="creditsP">Illustrations were generated with Google Gemini (“Nano Banana”) and are dedicated to the public domain under <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0</a> — download the full-size art from the <a href="https://github.com/YingzhiVA/reptilia-antiqua/tree/main/art" target="_blank" rel="noopener">repository</a> and reuse it freely. Code &amp; text © 2026 <a href="https://github.com/YingzhiVA" target="_blank" rel="noopener">YingzhiVA</a>, under the <a href="https://github.com/YingzhiVA/reptilia-antiqua/blob/main/LICENSE" target="_blank" rel="noopener">MIT Licence</a>. Pronunciation audio © Google.</p>
     </div>
   </details>
-  <div class="version" aria-label="version">Reptilia Antiqua · <span id="version">dev</span></div>
 </footer>
 
 <div class="overlay" id="overlay">
