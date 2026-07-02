@@ -4,7 +4,7 @@
 
 [![Reptilia Antiqua — an illustrated guide to dinosaurs & their prehistoric cousins](preview.jpg)](https://yingzhiva.github.io/Reptilia-Antiqua/)
 
-**An illustrated guide to dinosaurs & their prehistoric cousins** — a friendly cheat-sheet for grown-ups.
+**An illustrated guide to dinosaurs & their prehistoric cousins** — for young explorers and the young at heart.
 
 Tap any creature on the timeline to learn fun facts, see how big it was, and hear how to say its name. The interface is fully localised in **English, Deutsch, and Français**, with **Italiano, Español, and 中文 (繁體)** adding each creature's name and pronunciation. Next time your toddler shouts "Spinosaurus!", you'll be ready.
 
