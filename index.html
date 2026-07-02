@@ -97,8 +97,11 @@
   .vage{display:block;font-size:14px;color:var(--ink2);margin-top:2px;font-style:normal}
   .vchev{flex:0 0 auto;color:#bfa766;font-size:22px;line-height:1}
 
-  .overlay{position:fixed;inset:0;background:rgba(38,30,16,.55);display:none;align-items:center;justify-content:center;
-    padding:16px;z-index:50;backdrop-filter:blur(3px)}
+  .overlayBlur{position:fixed;inset:0;display:none;z-index:49;background:rgba(38,30,16,.55);
+    backdrop-filter:blur(3px);will-change:backdrop-filter;pointer-events:none}
+  .overlayBlur.open{display:block}
+  .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+    padding:16px;z-index:50}
   .overlay.open{display:flex}
   body.modal-open{position:fixed;overflow:hidden;width:100%}
   .card{background-color:var(--paper);background-image:var(--grain),var(--mottle);background-size:200px 200px,680px 680px;background-blend-mode:soft-light,multiply;width:min(640px,100%);overflow:hidden;border-radius:5px;
@@ -111,7 +114,7 @@
   .scene .main{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .scene.zoomable{cursor:zoom-in}
   .zoomhint{position:absolute;bottom:8px;right:8px;z-index:3;display:flex;align-items:center;justify-content:center;
-    width:30px;height:30px;border-radius:50%;background:rgba(38,30,16,.32);color:#fbf6ea;backdrop-filter:blur(2px);
+    width:30px;height:30px;border-radius:50%;background:rgba(30,22,10,.55);color:#fbf6ea;
     opacity:.5;transition:opacity .12s,transform .12s;pointer-events:none}
   .zoomhint .ic{width:16px;height:16px}
   .scene.zoomable:hover .zoomhint{opacity:.9;transform:scale(1.06)}
@@ -157,13 +160,14 @@
   .langrow .meta{flex:1;min-width:0}
   .langrow .name{font-family:'Cormorant',serif;font-weight:700;font-size:18px;color:var(--ink)}
   .langrow .sub{font-size:14px;color:var(--ink2);font-style:normal}
-  .speak{background:var(--brass);border:none;border-radius:50%;width:42px;height:42px;font-size:18px;cursor:pointer;color:#fff;
+  .speak{position:relative;background:var(--brass);border:none;border-radius:50%;width:42px;height:42px;font-size:18px;cursor:pointer;color:#fff;
     display:flex;align-items:center;justify-content:center;box-shadow:0 2px 5px rgba(80,60,20,.35);flex:0 0 auto;transition:transform .1s,box-shadow .1s}
   .speak:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(80,60,20,.4)}
   .speak:active{transform:translateY(0)}
   .speak.loading{opacity:.5}
-  .speak.playing{animation:pulse 1.1s ease-in-out infinite}
-  @keyframes pulse{0%,100%{box-shadow:0 2px 5px rgba(80,60,20,.35)}50%{box-shadow:0 2px 5px rgba(80,60,20,.35),0 0 0 7px rgba(168,132,47,.28)}}
+  .speak.playing::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid rgba(168,132,47,.55);
+    animation:pulse-ring 1.1s ease-in-out infinite;pointer-events:none}
+  @keyframes pulse-ring{0%,100%{transform:scale(.82);opacity:.9}50%{transform:scale(1.12);opacity:0}}
   /* pronunciation hero */
   .pronounce{display:flex;align-items:center;gap:14px;margin:14px 0 6px;padding:12px 16px;
     background:rgba(44,83,70,.07);border:1px solid var(--hair);border-left:3px solid var(--green);border-radius:4px}
@@ -279,6 +283,7 @@
   </details>
 </footer>
 
+<div class="overlayBlur" id="overlayBlur"></div>
 <div class="overlay" id="overlay">
   <div class="card" id="card" role="dialog" aria-modal="true">
     <button class="close" id="closeBtn" aria-label="Close">✕</button>
@@ -298,7 +303,7 @@ const CREDITS = {"proganochelys":{"title":"Proganochelys (AI illustration)","art
 
 const DINOS = [
   {id:"proganochelys",hab:"land",notDino:true,order:"Turtle",en:"Proganochelys",de:"Proganochelys",es:"Proganochelys",fr:"Proganochelys",it:"Proganochelys",zh:"原顎龜",pinyin:"yuán è guī",say:{en:"PRO-gan-oh-KEE-lis"},period:"Late Triassic",age:"~210 million years ago",ageMid:210,m:1,mt:"long",
-   facts:["One of the oldest known turtles — it already had a full, solid shell over 200 million years ago.","Unlike modern turtles, it couldn't pull its head into its shell for protection.","It lived alongside some of the very first dinosaurs, like Coelophysis."],facts_de:["Eine der ältesten bekannten Schildkröten – sie trug schon vor über 200 Millionen Jahren einen vollständigen, harten Panzer.","Anders als moderne Schildkröten konnte sie ihren Kopf nicht zum Schutz in den Panzer einziehen.","Sie lebte zur gleichen Zeit wie einige der allerersten Dinosaurier, etwa Coelophysis."],facts_fr:["L’une des plus anciennes tortues connues – elle portait déjà une carapace complète et solide il y a plus de 200 millions d’années.","Contrairement aux tortues modernes, elle ne pouvait pas rentrer sa tête dans sa carapace pour se protéger.","Elle vivait à la même époque que certains des tout premiers dinosaures, comme le Cœlophysis."]},
+   facts:["One of the oldest known turtles, it already had a full, solid shell over 200 million years ago.","Unlike modern turtles, it couldn't pull its head into its shell for protection.","It lived alongside some of the very first dinosaurs, like Coelophysis."],facts_de:["Eine der ältesten bekannten Schildkröten – sie trug schon vor über 200 Millionen Jahren einen vollständigen, harten Panzer.","Anders als moderne Schildkröten konnte sie ihren Kopf nicht zum Schutz in den Panzer einziehen.","Sie lebte zur gleichen Zeit wie einige der allerersten Dinosaurier, etwa Coelophysis."],facts_fr:["L’une des plus anciennes tortues connues – elle portait déjà une carapace complète et solide il y a plus de 200 millions d’années.","Contrairement aux tortues modernes, elle ne pouvait pas rentrer sa tête dans sa carapace pour se protéger.","Elle vivait à la même époque que certains des tout premiers dinosaures, comme le Cœlophysis."]},
   {id:"coelophysis",hab:"land",notDino:false,en:"Coelophysis",de:"Coelophysis",es:"Celofisis",fr:"Cœlophysis",it:"Celofisi",zh:"腔骨龍",pinyin:"qiāng gǔ lóng",say:{en:"See-lo-FY-sis"},period:"Late Triassic",age:"~215–201 million years ago",ageMid:208,m:3,mt:"long",
    facts:["One of the earliest known dinosaurs — alive over 200 million years ago.","Slim and fast, about 3 m long but light as a big dog.","Hundreds were found buried together in New Mexico — perhaps a pack caught in a flash flood."],facts_de:["Einer der frühesten bekannten Dinosaurier – er lebte vor über 200 Millionen Jahren.","Schlank und schnell, etwa 3 m lang, aber leicht wie ein grosser Hund.","In New Mexico wurden Hunderte zusammen begraben gefunden – vielleicht ein Rudel, das von einer Sturzflut überrascht wurde."],facts_fr:["L’un des plus anciens dinosaures connus – il vivait il y a plus de 200 millions d’années.","Svelte et rapide, environ 3 m de long mais léger comme un gros chien.","On en a trouvé des centaines enterrés ensemble au Nouveau-Mexique – peut-être une meute emportée par une crue soudaine."]},
   {id:"protosuchus",hab:"land",notDino:true,order:"Crocodylian",en:"Protosuchus",de:"Protosuchus",es:"Protosuchus",fr:"Protosuchus",it:"Protosuchus",zh:"原鱷",pinyin:"yuán è",say:{en:"PRO-toh-SOO-kus"},period:"Early Jurassic",age:"~199–196 million years ago",ageMid:197,m:1,mt:"long",
@@ -504,6 +509,7 @@ function buildTimeline(){
 
 /* ===== MODAL ===== */
 const overlay=document.getElementById("overlay");
+const overlayBlur=document.getElementById("overlayBlur");
 const cardContent=document.getElementById("cardContent");
 const card=document.getElementById("card"),prevBtn=document.getElementById("prevBtn"),nextBtn=document.getElementById("nextBtn");
 let currentCard=null;
@@ -559,10 +565,11 @@ function openCard(d){
   const _nav=navOrder(), _i=_nav.indexOf(d);
   prevBtn.disabled=_i<=0; nextBtn.disabled=_i>=_nav.length-1;
   overlay.classList.add("open");
+  overlayBlur.classList.add("open");
   lockScroll();
   cardContent.scrollTop=0;
 }
-function closeCard(){overlay.classList.remove("open");unlockScroll();stopAudio();}
+function closeCard(){overlay.classList.remove("open");overlayBlur.classList.remove("open");unlockScroll();stopAudio();}
 document.getElementById("closeBtn").addEventListener("click",closeCard);
 overlay.addEventListener("click",e=>{if(e.target===overlay)closeCard();});
 
