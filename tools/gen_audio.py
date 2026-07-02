@@ -22,7 +22,7 @@ LANGS = ["en", "de", "fr", "it", "es", "zh"]
 # lang -> (Google languageCode, voice name).  Female neural voices for a warm tone;
 # tweak the voice names here if you prefer a different one.
 VOICES = {
-    "en": ("en-GB", "en-GB-Neural2-C"),
+    "en": ("en-US", "en-US-Neural2-C"),
     "de": ("de-DE", "de-DE-Neural2-F"),
     "fr": ("fr-FR", "fr-FR-Neural2-C"),
     "it": ("it-IT", "it-IT-Neural2-A"),
@@ -33,10 +33,7 @@ SPEAKING_RATE = 0.95
 
 # Per-clip VOICE overrides for when the default voice mis-says a name.
 # Key (id, lang) -> (languageCode, voiceName) used just for that clip.
-VOICE_OVERRIDES = {
-    # en-GB reads "Coelophysis" with a hard C; the US voice gets the soft-c right.
-    ("coelophysis", "en"): ("en-US", "en-US-Neural2-C"),
-}
+VOICE_OVERRIDES = {}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HTML = os.path.join(ROOT, "index.html")

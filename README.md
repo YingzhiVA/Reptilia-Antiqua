@@ -15,12 +15,12 @@ A single `index.html` styled like a vintage natural-history monograph, with orig
 - **Online:** **https://yingzhiva.github.io/Reptilia-Antiqua/** (hosted on GitHub Pages).
 - **Locally:** just open `index.html` in any modern browser — no build step, no dependencies.
 
-> Each creature's name is read aloud by a pre-recorded neural voice (British English for the English names); if a clip can't load, your device's built-in voice fills in.
+> Each creature's name is read aloud by a pre-recorded neural voice (American English for the English names); if a clip can't load, your device's built-in voice fills in.
 
 ## Features
 
 - Non-uniform geological timeline (busy eras stretched, long empty stretches folded away)
-- Survivors of the extinction shown *past* the asteroid line — because birds are living dinosaurs
+- Survivors of the extinction shown *past* the asteroid line — birds, turtles, and crocodylians all lived through it
 - Six languages: full interface localisation in **English, Deutsch & Français**; **Italiano, Español & 中文 (繁體)** add each name + pronunciation
 - A "field-guide" card per creature — name & group (Dinosaur / Pterosaur / …), period, a size-vs-human bar, fun facts, and recorded pronunciation (selected language + English)
 - Browse cards without leaving: prev/next arrows, swipe, or arrow keys
