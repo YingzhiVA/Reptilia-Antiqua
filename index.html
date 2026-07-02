@@ -75,7 +75,7 @@
   .vend.survive{color:var(--green)}
   .vgap{display:flex;align-items:center;min-height:60px;color:#8a7350;padding:6px 0}
   .vgap .vdots{display:none}
-  .vgap .vmy{font-size:13px;color:#8a7350;font-style:normal}
+  .vgap .vmy{font-size:15px;color:#8a7350;font-style:normal}
   .vgroup{border-radius:5px;overflow:hidden;border:1px solid var(--hair);
     box-shadow:0 6px 20px rgba(74,56,22,.10),inset 0 0 44px rgba(92,58,20,.16);margin:10px 0;
     background-color:var(--paper);background-image:var(--grain),var(--mottle);background-size:200px 200px,680px 680px;background-blend-mode:soft-light,multiply}
@@ -100,7 +100,7 @@
   .overlay{position:fixed;inset:0;background:rgba(38,30,16,.55);display:none;align-items:center;justify-content:center;
     padding:16px;z-index:50;backdrop-filter:blur(3px)}
   .overlay.open{display:flex}
-  body.modal-open{overflow:hidden}
+  body.modal-open{position:fixed;overflow:hidden;width:100%}
   .card{background-color:var(--paper);background-image:var(--grain),var(--mottle);background-size:200px 200px,680px 680px;background-blend-mode:soft-light,multiply;width:min(640px,100%);overflow:hidden;border-radius:5px;
     box-shadow:0 24px 60px rgba(0,0,0,.45),inset 0 0 80px rgba(92,58,20,.22),inset 0 0 26px rgba(92,58,20,.16);border:1px solid var(--hair);position:relative;animation:pop .18s ease}
   #cardContent{max-height:92vh;max-height:92svh;overflow-y:auto;overscroll-behavior:contain}
@@ -384,7 +384,7 @@ const STR={
   filterSea:{en:"Ocean-swimmers",de:"Meeresbewohner",fr:"Marins"},
   tip:{en:"<b>{air} Flyers</b> (pterosaurs) and <b>{sea} ocean-swimmers</b> (marine reptiles) lived <i>alongside</i> the dinosaurs but aren’t <i>true</i> dinosaurs — they’re close cousins. Tap a pill above to filter the timeline. Busy eras are spread out; long empty stretches are folded away as <b>{dots}</b>.",de:"<b>{air} Flieger</b> (Flugsaurier) und <b>{sea} Meeresbewohner</b> (Meeresreptilien) lebten <i>neben</i> den Dinosauriern, sind aber keine <i>echten</i> Dinosaurier – sie sind nahe Verwandte. Tippe oben auf eine Pille, um die Zeitleiste zu filtern. Lebhafte Epochen sind gespreizt; lange leere Abschnitte sind als <b>{dots}</b> zusammengefaltet.",fr:"<b>{air} Volants</b> (ptérosaures) et <b>{sea} marins</b> (reptiles marins) vivaient <i>aux côtés</i> des dinosaures mais ne sont pas de <i>vrais</i> dinosaures – ce sont de proches cousins. Touchez une pastille ci-dessus pour filtrer la frise. Les époques chargées sont étirées ; les longues périodes vides sont repliées en <b>{dots}</b>."},
   tlDawn:{en:"The dawn of the dinosaurs · oldest first",de:"Die Morgendämmerung der Dinosaurier · älteste zuerst",fr:"L’aube des dinosaures · les plus anciens d’abord"},
-  asteroidL1:{en:"Asteroid impact — 66 million years ago",de:"Asteroideneinschlag – vor 66 Millionen Jahren",fr:"Impact d’astéroïde – il y a 66 millions d’années"},
+  asteroidL1:{en:"Asteroid impact — 66 million years ago,",de:"Asteroideneinschlag – vor 66 Millionen Jahren,",fr:"Impact d’astéroïde – il y a 66 millions d’années,"},
   asteroidL2:{en:"the end of the dinosaur giants",de:"das Ende der Dinosaurier-Giganten",fr:"la fin des dinosaures géants"},
   survivorsHdr:{en:"The survivors",de:"Die Überlebenden",fr:"Les survivants"},
   survivorsSpan:{en:"66 Mya → today",de:"vor 66 Mio. J. → heute",fr:"66 Ma → aujourd’hui"},
@@ -488,7 +488,7 @@ function buildTimeline(){
         <div class="vbody">${rows}</div></div>`;
     });
   }
-  html+=`<div class="vend bottom">${ICON.asteroid} ${t("asteroidL1")}<br>${t("asteroidL2")}</div>`;
+  html+=`<div class="vend bottom">${ICON.asteroid} ${t("asteroidL1")} ${t("asteroidL2")}</div>`;
   if(survivors.length){
     const rows=survivors.map(rowHTML).join("");
     html+=`<div class="vgroup survivors" style="--c:#bcdfa4">
@@ -507,6 +507,18 @@ const overlay=document.getElementById("overlay");
 const cardContent=document.getElementById("cardContent");
 const card=document.getElementById("card"),prevBtn=document.getElementById("prevBtn"),nextBtn=document.getElementById("nextBtn");
 let currentCard=null;
+let lockedScrollY=0;
+function lockScroll(){
+  if(document.body.classList.contains("modal-open"))return;
+  lockedScrollY=window.scrollY;
+  document.body.style.top=(-lockedScrollY)+"px";
+  document.body.classList.add("modal-open");
+}
+function unlockScroll(){
+  document.body.classList.remove("modal-open");
+  document.body.style.top="";
+  window.scrollTo(0,lockedScrollY);
+}
 function openCard(d){
   currentCard=d;
   const habText={land:ICON.land+" "+t("habLand"),air:ICON.air+" "+t("habAir"),sea:ICON.sea+" "+t("habSea")}[d.hab];
@@ -547,10 +559,10 @@ function openCard(d){
   const _nav=navOrder(), _i=_nav.indexOf(d);
   prevBtn.disabled=_i<=0; nextBtn.disabled=_i>=_nav.length-1;
   overlay.classList.add("open");
-  document.body.classList.add("modal-open");
+  lockScroll();
   cardContent.scrollTop=0;
 }
-function closeCard(){overlay.classList.remove("open");document.body.classList.remove("modal-open");stopAudio();}
+function closeCard(){overlay.classList.remove("open");unlockScroll();stopAudio();}
 document.getElementById("closeBtn").addEventListener("click",closeCard);
 overlay.addEventListener("click",e=>{if(e.target===overlay)closeCard();});
 
