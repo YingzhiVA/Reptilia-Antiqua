@@ -24,6 +24,7 @@ A single `index.html` styled like a vintage natural-history monograph, with orig
 - Six languages: full interface localisation in **English, Deutsch & Français**; **Italiano, Español & 中文 (繁體)** add each name + pronunciation
 - A "field-guide" card per creature — name & group (Dinosaur / Pterosaur / …), period, a size-vs-human bar, fun facts, and recorded pronunciation (selected language + English)
 - Browse cards without leaving: prev/next arrows, swipe, or arrow keys
+- Browse the full-screen artwork the same way — arrows, swipe, or arrow keys; closing lands on that creature's card
 
 ## Feedback
 
